@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .surface{
+      width: 200px;
+      height: 200px;
+    }
+
+    .builtin{
+      background: red;
+      -webkit-clip-path: circle(50%);
+      -moz-clip-path: circle(50%);
+      -ms-clip-path: circle(50%);
+      clip-path: circle(50%);
+    }
+
+    .fromsvg{
+      background: orange;
+      -webkit-clip-path: url(#shape);
+      -ms-clip-path: url('#shape');
+      -moz-clip-path: url('#shape');
+      clip-path: url('#shape');
+
+      /* ISSUE: https://code.google.com/p/chromium/issues/detail?id=417370 */
+      /* affects Chrome 37, Safari on IOS 8, */
+      -webkit-transform: translate(0,0);
+      transform: translate(0,0);
+    }
+
+    .withinsvg{
+      clip-path: url(#shape);
+    }
+
+  </style>
+</head>
+<body>
+  <h2>CSS: <code>clip-path</code> test</h2>
+  <em>1. Built-in CSS shape function</em>
+  <div class="surface builtin"></div>
+  <em>2. url() from SVG on HTML</em>
+  <div class="surface fromsvg"></div>
+  <em>3. url() from SVG on SVG</em><br>
+  <svg class="surface" width="200" height="200">
+    <defs>
+      <clipPath id="shape">
+        <circle r="100" cx="100" cy="100"></circle>
+      </clipPath>
+    </defs>
+    <rect x="0" y="0" width="200" height="200" fill="green" class="withinsvg" />
+  </svg>
+
+</body>
+</html>
