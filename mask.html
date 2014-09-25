@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>mask-image</title>
+  <style>
+    /*
+      September 2014:
+      Mozilla doesn't use prefixed properties for masking; dev happens behind flag in about:config.
+      WebKit uses prefixed properties.
+      Chrome uses prefixed and un-prefixed for various properties; it's a mess
+    */
+    .surface{
+      width: 100px;
+      height: 100px;
+    }
+
+    .image-alpha{
+      background: red;
+      -webkit-mask: url(mask-alpha.png);
+      -ms-mask: url(mask-alpha.png);
+      mask: url(mask-alpha.png);
+    }
+
+    .image-luminance{
+      background: red;
+      -webkit-mask: url(mask-luminance.jpg);
+      -ms-mask: url(mask-luminance.jpg);
+      mask: url(mask-luminance.jpg);
+
+      /*
+      OBSOLETE mask-source-type
+      prefixed for WebKit (Safari, iOS 8),
+      un-prefixed, behind 'experimental web platform features' flag in Chrome
+      */
+      -webkit-mask-source-type: luminance;
+      mask-source-type: luminance;
+
+      /*
+      SPEC-COMPLIANT mask-mode, not yet implemented
+      http://dev.w3.org/fxtf/css-masking-1/#the-mask-mode
+      */
+      -webkit-mask-mode: luminance;
+      -ms-mask-mode: luminance;
+      mask-mode: luminance;
+    }
+
+    .gradient{
+      background: yellow;
+      -webkit-mask: radial-gradient(rgba(0,0,0,1) 70%, rgba(0,0,0,0) 70%);
+      -ms-mask: radial-gradient(rgba(0,0,0,1) 70%, rgba(0,0,0,0) 70%);
+      mask: radial-gradient(rgba(0,0,0,1) 70%, rgba(0,0,0,0) 70%);
+    }
+
+    .fromsvg-alpha{
+      background: orange;
+      -webkit-mask: url(#mask-alpha);
+      -ms-mask: url(#mask-alpha);
+      mask: url(#mask-alpha);
+    }
+
+    .fromsvg-luminance{
+      background: orange;
+      -webkit-mask: url(#mask-luminance);
+      -ms-mask: url(#mask-luminance);
+      mask: url(#mask-luminance);
+    }
+
+    .withinsvg{
+      mask: url(#mask-luminance);
+    }
+
+  </style>
+</head>
+<body>
+  <h2>CSS: <code>mask</code> test</h2>
+  <em>1. mask from image (alpha)</em>
+  <div class="surface image-alpha"></div>
+  <em>2. mask from image (luminance)</em>
+  <div class="surface image-luminance"></div>
+  <em>3. mask from CSS gradient</em>
+  <div class="surface gradient"></div>
+
+  <em>4. mask from SVG &lt;mask&gt; on HTML (alpha)</em>
+  <div class="surface fromsvg-alpha"></div>
+
+  <em>5. mask from SVG &lt;mask&gt; on HTML (luminance)</em>
+  <div class="surface fromsvg-luminance"></div>
+
+  <em>6. mask from SVG &lt;mask&gt; on SVG</em><br>
+  <svg class="surface" width="100" height="100">
+    <mask id="mask-luminance" mask-type="luminance">
+      <circle r="50" cx="50" cy="50" fill="#ffffff"></circle>
+    </mask>
+    <mask id="mask-alpha" mask-type="alpha">
+      <circle r="50" cx="50" cy="50" fill="rgba(0,0,0,0.99)"></circle>
+    </mask>
+
+    <rect x="0" y="0" width="100" height="100" fill="green" class="withinsvg" />
+
+  </svg>
+</body>
+</html>
